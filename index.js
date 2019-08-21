@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const { oauth2, client } = require('zoom-bot-sdk')
 const oauth2Client = oauth2(process.env.client_id, process.env.client_secret, process.env.redirect_url)
 
-let chatbot = client(process.env.client_id, process.env.verification_token, process.env.bot_jid).commands([{ command: process.env.slash_command, hint: 'Golden State is the best Basketball team', description: 'Vote on a topic right in Zoom Chat' }]).configurate({ help: true, errorHelp: false }).defaultAuth(oauth2Client.connect())
+let chatbot = client(process.env.client_id, process.env.verification_token, process.env.bot_jid).commands([{ command: '/' + process.env.slash_command, hint: 'Golden State is the best Basketball team', description: 'Vote on a topic right in Zoom Chat' }]).configurate({ help: true, errorHelp: false }).defaultAuth(oauth2Client.connect())
 
 const app = express()
 const port = process.env.PORT || 4000
@@ -22,16 +22,16 @@ app.get('/authorize', async function (req, res) {
 // does this check verification code on its own?
 
 app.post('/' + process.env.slash_command, async function (req, res) {
-  if (req.headers.authorization === process.env.verification_token) {
+  // if (req.headers.authorization === process.env.verification_token) {
     res.status(200)
     res.send()
     let { body, headers } = req
     try {
       await chatbot.handle({ body, headers })
     } catch (error) { console.log(error) }
-  } else {
-    res.send('Unauthorized request to Vote Chatbot for Zoom.')
-  }
+  // } else {
+  //   res.send('Unauthorized request to Vote Chatbot for Zoom.')
+  // }
 })
 
 chatbot.on('commands', async function (event) {
