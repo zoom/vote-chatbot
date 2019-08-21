@@ -16,22 +16,22 @@ app.get('/authorize', async function (req, res) {
   try {
     await oauth2Client.connectByCode(req.query.code)
     res.send('Thanks for installing the Vote Chatbot for Zoom!')
-  } catch (error) { res.send(error) }
+  } catch (error) {
+    console.log(error)
+    res.send(error)
+  }
 })
 
-// does this check verification code on its own?
-
 app.post('/' + process.env.slash_command, async function (req, res) {
-  // if (req.headers.authorization === process.env.verification_token) {
-    res.status(200)
-    res.send()
-    let { body, headers } = req
-    try {
-      await chatbot.handle({ body, headers })
-    } catch (error) { console.log(error) }
-  // } else {
-  //   res.send('Unauthorized request to Vote Chatbot for Zoom.')
-  // }
+  res.status(200)
+  res.send()
+  let { body, headers } = req
+  try {
+    await chatbot.handle({ body, headers })
+  } catch (error) {
+    console.log(error)
+    res.send(error)
+  }
 })
 
 chatbot.on('commands', async function (event) {
