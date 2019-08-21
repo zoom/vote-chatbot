@@ -5,8 +5,6 @@ const bodyParser = require('body-parser')
 const { oauth2, client } = require('zoom-bot-sdk')
 const oauth2Client = oauth2(process.env.client_id, process.env.client_secret, process.env.redirect_url)
 
-console.log(process.env.client_id)
-
 let chatbot = client(process.env.client_id, process.env.verification_token, process.env.bot_jid).commands([{ command: process.env.slash_command, hint: 'Golden State is the best Basketball team', description: 'Vote on a topic right in Zoom Chat' }]).configurate({ help: true, errorHelp: false }).defaultAuth(oauth2Client.connect())
 
 const app = express()
