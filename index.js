@@ -22,7 +22,7 @@ app.get('/authorize', async function (req, res) {
 // does this check verification code on its own?
 
 app.post('/' + process.env.slash_command, async function (req, res) {
-  if (req.headers.authorization === process.env.zoom_verification_token) {
+  if (req.headers.authorization === process.env.verification_token) {
     res.status(200)
     res.send()
     let { body, headers } = req
@@ -103,7 +103,7 @@ app.get('/', (req, res) => {
 
 // uninstall flow, required to publish Chatbot app to marketplace
 app.post('/deauthorize', (req, res) => {
-  if (req.headers.authorization === process.env.zoom_verification_token) {
+  if (req.headers.authorization === process.env.verification_token) {
     res.status(200)
     res.send()
     request({
@@ -133,6 +133,10 @@ app.post('/deauthorize', (req, res) => {
     res.send('Unauthorized request to Vote Chatbot for Zoom.')
   }
 })
+
+
+// test if I really need redirect url
+// test if I really need if (req.headers.authorization === process.env.verification_token) {
 
 
 
