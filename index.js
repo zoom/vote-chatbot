@@ -23,11 +23,11 @@ app.get('/authorize', async function (req, res) {
 })
 
 app.post('/' + process.env.slash_command, async function (req, res) {
-  res.status(200)
-  res.send()
   let { body, headers } = req
   try {
     await chatbot.handle({ body, headers })
+    res.status(200)
+    res.send()
   } catch (error) {
     console.log(error)
     res.send(error)
