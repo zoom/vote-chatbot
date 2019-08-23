@@ -2,16 +2,18 @@ require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const { oauth2, client } = require('zoom-bot-sdk')
+const { oauth2, client } = require('@zoomus/chatbot')
 const oauth2Client = oauth2(process.env.client_id, process.env.client_secret, process.env.redirect_url)
 
-let chatbot = client(process.env.client_id, process.env.verification_token, process.env.bot_jid).commands([{ command: '/' + process.env.slash_command, hint: 'Golden State is the best Basketball team', description: 'Vote on a topic right in Zoom Chat' }]).configurate({ help: true, errorHelp: false }).defaultAuth(oauth2Client.connect())
+// sets up chatbot object and adds a help message when user tyoes "/vote help"
+let chatbot = client(process.env.client_id, process.env.verification_token, process.env.bot_jid).commands([{ command: '/' + process.env.slash_command, hint: 'Tacos for Lunch?', description: 'Vote on topics in Zoom Chat' }]).configurate({ help: true, errorHelp: false }).defaultAuth(oauth2Client.connect())
 
 const app = express()
 const port = process.env.PORT || 4000
 
 app.use(bodyParser.json())
 
+// recieves redirect url
 app.get('/authorize', async function (req, res) {
   try {
     await oauth2Client.connectByCode(req.query.code)
@@ -22,9 +24,11 @@ app.get('/authorize', async function (req, res) {
   }
 })
 
+// recieves slash command
 app.post('/' + process.env.slash_command, async function (req, res) {
   let { body, headers } = req
   try {
+    // calls chatbot.on() function below based on what is sent (commands or actions)
     await chatbot.handle({ body, headers })
     res.status(200)
     res.send()
@@ -34,74 +38,88 @@ app.post('/' + process.env.slash_command, async function (req, res) {
   }
 })
 
+// handles slash commands
 chatbot.on('commands', async function (event) {
+  // handles auth
   let connection = oauth2Client.connect()
   let app = chatbot.create({ auth: connection })
 
   try {
+
+    // your app logic here, I am sending a chatbot message with buttons
     await app.sendMessage({
       to_jid: event.payload.toJid,
       account_id: event.payload.accountId,
       header: { text: 'Vote bot' },
       body: [
         {
-          type: 'message',
-          text: '"' + event.message + '"'
-        },
-        {
-          type: 'actions',
-          items: [{
-            'text': 'Up Vote',
-            'value': 'up-vote',
-            'style': 'Primary'
-          },
-          {
-            'text': 'Down Vote',
-            'value': 'down-vote',
-            'style': 'Danger'
-          }]
+          type: 'section',
+          sections: [
+            {
+              type: 'message',
+              text: '"' + event.message + '"'
+            },
+            {
+              type: 'actions',
+              items: [{
+                'text': 'Up Vote',
+                'value': 'up-vote',
+                'style': 'Primary'
+              },
+              {
+                'text': 'Down Vote',
+                'value': 'down-vote',
+                'style': 'Danger'
+              }]
+            }
+          ],
+          footer: 'Vote by ' + event.payload.userName
         }
       ]
     })
   } catch (error) { console.log(error) }
 })
 
+// handles user actions on chatbot messages like editing text and form fields, clicking buttons, and choosing dropdown options,
 chatbot.on('actions', async function (event) {
+  // handles auth
   let connection = oauth2Client.connect()
   let app = chatbot.create({ auth: connection })
   try {
+
+    // your app logic here, I am sending a chatbot message with users action from button
     await app.sendMessage({
       to_jid: event.payload.toJid,
       account_id: event.payload.accountId,
-      header: { text: 'Vote bot: ' + event.payload.original.body[0].text },
+      header: { text: 'Vote bot: ' + event.payload.original.body[0].sections[0].text },
       body: { type: 'message', text: event.payload.userName + ' ' + event.payload.actionItem.text + 'd' }
     })
   } catch (error) { console.log(error) }
 })
 
-// other routes required to publish Chatbot to app marketplace
+// ------------------ Other routes required to publish Chatbot to Zoom App Marketplace (not required if private (your Zoom account only) app) ------------------
 
-// support page required to publish Chatbot app to marketplace
+// required, support page
 app.get('/support', (req, res) => {
   res.send('Contact {{ email }} for support.')
 })
 
-// privacy page required to publish Chatbot app to marketplace
+// required, privacy page
 app.get('/privacy', (req, res) => {
   res.send('The Vote Chatbot for Zoom does not store any user data.')
 })
 
-// domain name validation required to publish Chatbot app to marketplace
+// required, domain name validation
 app.get('/zoomverify/verifyzoom.html', (req, res) => {
   res.send(process.env.zoom_verification_code)
 })
 
-// could be your app web homepage with link to install or pictures of how it works
+// optional, could be your app web homepage with link to install or pictures of how it works
 app.get('/', (req, res) => {
   res.send('Welcome to the Vote Chatbot for Zoom!')
 })
 
-// uninstall flow, required to publish Chatbot app to marketplace
+// required, uninstall flow
 app.post('/deauthorize', (req, res) => {
   if (req.headers.authorization === process.env.verification_token) {
     res.status(200)
@@ -133,11 +151,5 @@ app.post('/deauthorize', (req, res) => {
     res.send('Unauthorized request to Vote Chatbot for Zoom.')
   }
 })
-
-
-// test if I really need redirect url
-// test if I really need if (req.headers.authorization === process.env.verification_token) {
-
-
 
 app.listen(port, () => console.log(`Vote Chatbot for Zoom listening on port ${port}!`))
