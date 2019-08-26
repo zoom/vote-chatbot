@@ -1,0 +1,39 @@
+{
+  "name": "Vote Chatbot",
+  "description": "Vote on topics in Zoom Chat",
+  "repository": "https://github.com/zoom/vote-chatbot",
+  "logo": "",
+  "keywords": ["zoom", "chatbot", "vote", "node.js", "express"],
+  "env": {
+    "client_id": {
+      "description": "Your Zoom Production Client ID, found on your Zoom App Credentials page",
+      "value": "",
+      "required": true
+    },
+    "client_secret": {
+      "description": "Your Zoom Production Client Secret, found on your Zoom App Credentials page",
+      "value": "",
+      "required": true
+    },
+    "bot_jid": {
+      "description": "Your Zoom Production Bot JID, found on your Zoom Features page",
+      "value": "",
+      "required": true
+    },
+    "slash_command": {
+      "description": "Your Zoom Slash Command, found on your Zoom Features page",
+      "value": "",
+      "required": true
+    },
+    "verification_token": {
+      "description": "Your Zoom Verification Token, found on your Zoom Features page",
+      "value": "",
+      "required": true
+    },
+    "verification_code": {
+      "description": "Optional, Your Zoom domain verification code, used to verify your domain name, found on your Zoom Submit page",
+      "value": "",
+      "required": false
+    }
+  }
+}

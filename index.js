@@ -3,7 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 
 const { oauth2, client } = require('@zoomus/chatbot')
-const oauth2Client = oauth2(process.env.client_id, process.env.client_secret, process.env.redirect_url)
+const oauth2Client = oauth2(process.env.client_id, process.env.client_secret)
 
 // sets up chatbot object and adds a help message when user tyoes "/vote help"
 let chatbot = client(process.env.client_id, process.env.verification_token, process.env.bot_jid).commands([{ command: '/' + process.env.slash_command, hint: 'Tacos for Lunch?', description: 'Vote on topics in Zoom Chat' }]).configurate({ help: true, errorHelp: false }).defaultAuth(oauth2Client.connect())
@@ -16,7 +16,6 @@ app.use(bodyParser.json())
 // recieves redirect url
 app.get('/authorize', async function (req, res) {
   try {
-    await oauth2Client.connectByCode(req.query.code)
     res.send('Thanks for installing the Vote Chatbot for Zoom!')
   } catch (error) {
     console.log(error)
