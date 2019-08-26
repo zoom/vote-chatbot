@@ -15,12 +15,7 @@ app.use(bodyParser.json())
 
 // recieves redirect url
 app.get('/authorize', async function (req, res) {
-  try {
-    res.send('Thanks for installing the Vote Chatbot for Zoom!')
-  } catch (error) {
-    console.log(error)
-    res.send(error)
-  }
+  res.send('Thanks for installing the Vote Chatbot for Zoom!')
 })
 
 // recieves slash command
