@@ -18,7 +18,7 @@ app.get('/authorize', async function (req, res) {
   res.send('Thanks for installing the Vote Chatbot for Zoom!')
 })
 
-// recieves slash command
+// recieves slash commands and user actions
 app.post('/' + process.env.slash_command, async function (req, res) {
   let { body, headers } = req
   try {
