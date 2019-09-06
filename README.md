@@ -2,6 +2,10 @@
 
 This is a sample Chatbot app using the [Zoom Chatbot NPM Package](https://www.npmjs.com/package/@zoomus/chatbot).
 
+![Vote Chatbot for Zoom](https://s3.amazonaws.com/user-content.stoplight.io/19808/1567798340584)
+
+To run the completed Chatbot code locally or deploy it to a live server, continue reading below.
+
 ## Local/Development Setup
 
 To run the completed Chatbot locally, follow these steps,
