@@ -1,5 +1,7 @@
 # Vote Chatbot for Zoom
 
+Use of this sample app is subject to our [Terms of Use](https://zoom.us/docs/en-us/zoom_api_license_and_tou.html).
+
 This is a sample Chatbot app using the [Zoom Chatbot NPM Package](https://www.npmjs.com/package/@zoomus/chatbot).
 
 ![Vote Chatbot for Zoom](https://s3.amazonaws.com/user-content.stoplight.io/19808/1567798340584)
