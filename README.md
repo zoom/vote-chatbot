@@ -4,7 +4,7 @@ Use of this sample app is subject to our [Terms of Use](https://zoom.us/docs/en-
 
 This is a sample Chatbot app using the [Zoom Chatbot NPM Package](https://www.npmjs.com/package/@zoomus/chatbot).
 
-![Vote Chatbot for Zoom](https://s3.amazonaws.com/user-content.stoplight.io/19808/1567798340584)
+![Vote Chatbot for Zoom](https://marketplace.zoom.us/docs/images/migrated/1567798340584.png)
 
 To run the completed Chatbot code locally or deploy it to a live server, continue reading below.
 
